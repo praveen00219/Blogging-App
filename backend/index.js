@@ -1,5 +1,4 @@
 import express from "express";
-import bodyParser from "body-parser";
 import "dotenv/config";
 import mongoose from "mongoose";
 import userRouter from "./routes/user.js";
@@ -8,9 +7,19 @@ import blogRouter from "./routes/blogs.js";
 import cors from "cors";
 import commentsRouter from "./routes/comments.js";
 import cookieParser from "cookie-parser";
+
 const app = express();
 
-await mongoose.connect(process.env.MONGODBURL);
+// MongoDB connection
+mongoose
+  .connect(process.env.MONGODBURL)
+  .then(() => {
+    console.log("MongoDB connected successfully");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1); // Exit process with failure
+  });
 
 app.use(cookieParser());
 
